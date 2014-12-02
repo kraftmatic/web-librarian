@@ -3,7 +3,7 @@
  * Plugin Name: Web Librarian WP Plugin
  * Plugin URI: http://www.deepsoft.com/WebLibrarian
  * Description: A plugin that implements a web-based library catalog and circulation System
- * Version: 3.2.10.4
+ * Version: 3.2.10.5
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  *
@@ -128,16 +128,17 @@ class WebLibrarian {
 	global $wp_roles;
 	$librarian = get_role('librarian');
 	if ($librarian == null) {
-	    add_role('librarian', __('Librarian','web-librarian'), array('read' => true,
-						     'edit_users' => true,
-						     'manage_patrons' => true,
-						     'manage_collection' => true,
-						     'manage_circulation' => true));
+          add_role('librarian', __('Librarian','web-librarian'), 
+                   array('read' => true,
+                         'edit_users' => true,
+                         'manage_patrons' => true,
+                         'manage_collection' => true,
+                         'manage_circulation' => true));
 	} else {
-	    $librarian->add_cap('edit_users');
-	    $librarian->add_cap('manage_patrons');
-	    $librarian->add_cap('manage_collection');
-	    $librarian->add_cap('manage_circulation');
+          $librarian->add_cap('edit_users');
+          $librarian->add_cap('manage_patrons');
+          $librarian->add_cap('manage_collection');
+          $librarian->add_cap('manage_circulation');
 	}
 	$senioraid = get_role('senioraid');
 	if ($senioraid == null) {

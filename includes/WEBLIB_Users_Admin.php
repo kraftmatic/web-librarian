@@ -222,7 +222,7 @@ class WEBLIB_Users_Admin extends WP_List_Table {
 	  ?><div id="message" class="update fade"><?php echo $message; ?></div><?php
 	}
 	?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
-	<input type="hidden" name="page" value="add-patron-id-to-a-user" />
+	<input type="hidden" name="page" value="weblib-add-patron-id-to-a-user" />
 	<?php $this->search_box(__( 'Search Users','web-librarian' ), 'user' ); ?>
 	<?php $this->display(); ?></form></div><?php
   }

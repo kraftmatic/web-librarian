@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/WebLibrarian
 Tags: widget,plugin,shortcode,library,circulation,database
 Requires at least: 3.2.1
 Tested up to: 3.5
-Stable tag: 3.2.10.4
+Stable tag: 3.2.10.5
 License: GPL2
 
 A WordPress plugin that implements a basic library collection and
@@ -144,6 +144,9 @@ as well.
 No Screenshots yet.
 
 == Changelog ==
+
+= 3.2.10.5 =
+* Fix small bug in Add Patron ID page: wrong page id in search form.
 
 = 3.2.10.4 =
 * Minor stylesheet fix (#overdue => span.overdue).
