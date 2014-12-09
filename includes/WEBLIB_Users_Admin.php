@@ -140,7 +140,7 @@ class WEBLIB_Users_Admin extends WP_List_Table {
       }
     }
     global $usersearch;
-    $usersearch = isset( $_REQUEST['s'] ) ? $_REQUEST['s'] : '';
+    $usersearch = isset( $_REQUEST['s'] ) ? stripslashes( trim( $_REQUEST['s'] ) ) : '';
     // Deal with columns
     $columns = $this->get_columns();    // All of our columns
     $hidden  = array();         // Hidden columns [none]
@@ -149,13 +149,16 @@ class WEBLIB_Users_Admin extends WP_List_Table {
 
     $per_page = $this->get_per_page($option);
     $paged = $this->get_pagenum();
-
+    
     $args = array(
 		'number' => $per_page,
 		'offset' => ( $paged-1 ) * $per_page,
 		'search' => $usersearch,
 		'fields' => array('id','user_login') );
 
+    if ( '' !== $args['search'] )
+        $args['search'] = '*' . $args['search'] . '*';
+    
     $wp_user_search = new WP_User_Query( $args );
 
     $this->items = $wp_user_search->get_results();
