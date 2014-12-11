@@ -934,14 +934,12 @@ class WEBLIB_ItemInCollection {
           $index = count($digits) - 1;
           $next = ord($digits[$index]) + 1;
 	  if (chr($next) > '9' && chr($next) < 'A') $next = ord('A');
-	  if (chr($next) > 'Z' && chr($next) < 'a') $next = ord('a');
-          while (chr($next) > 'z' && $index >= 0) {
+          while (chr($next) > 'Z' && $index >= 0) {
             $digits[$index] = '0';
             $index--;
 	    if ($index >= 0) {
 	      $next = ord($digits[$index]) + 1;
 	      if (chr($next) > '9' && chr($next) < 'A') $next = ord('A');
-	      if (chr($next) > 'Z' && chr($next) < 'a') $next = ord('a');
 	    } else {
 	      $next = ord(chr('0')+1);
 	    }
