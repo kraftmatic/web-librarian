@@ -3,8 +3,8 @@ Contributors: RobertPHeller
 Donate link: http://www.deepsoft.com/WebLibrarian
 Tags: widget,plugin,shortcode,library,circulation,database
 Requires at least: 3.2.1
-Tested up to: 3.5
-Stable tag: 3.2.10.7
+Tested up to: 4.0
+Stable tag: 3.2.10.8
 License: GPL2
 
 A WordPress plugin that implements a basic library collection and
@@ -144,6 +144,9 @@ as well.
 No Screenshots yet.
 
 == Changelog ==
+
+= 3.2.10.8 =
+* Moved URL defines to the constructor. And updated tested to version.
 
 = 3.2.10.7 =
 * Fix incrstring -- MySQL uses case folded compares for unique string keys!

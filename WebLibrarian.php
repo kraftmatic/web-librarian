@@ -3,7 +3,7 @@
  * Plugin Name: Web Librarian WP Plugin
  * Plugin URI: http://www.deepsoft.com/WebLibrarian
  * Description: A plugin that implements a web-based library catalog and circulation System
- * Version: 3.2.10.7
+ * Version: 3.2.10.8
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  *
@@ -69,6 +69,11 @@ class WebLibrarian {
      */
     function __construct() {
         $this->version = self::_getVersion();
+        define('WEBLIB_BASEURL',plugins_url( '', __FILE__));
+        define('WEBLIB_CSSURL', plugins_url('/css',__FILE__));
+        define('WEBLIB_JSURL', plugins_url('/js',__FILE__));
+        define('WEBLIB_IMAGEURL', plugins_url('/images',__FILE__));
+        //define('WEBLIB_DOCURL', plugins_url('/user_manual',__FILE__));
 	// Add the installation and uninstallation hooks
 	register_activation_hook(WEBLIB_DIR . '/' . WEBLIB_FILE, 
 				array($this,'install'));
@@ -100,11 +105,6 @@ class WebLibrarian {
 	//}
     }
     function init_action() {
-      define('WEBLIB_BASEURL',plugins_url( '', __FILE__));
-      define('WEBLIB_CSSURL', plugins_url('/css',__FILE__));
-      define('WEBLIB_JSURL', plugins_url('/js',__FILE__));
-      define('WEBLIB_IMAGEURL', plugins_url('/images',__FILE__));
-      //define('WEBLIB_DOCURL', plugins_url('/user_manual',__FILE__));
       wp_enqueue_style('weblib-front-style',WEBLIB_CSSURL . '/front.css',
                        null,$this->version);
       if (is_admin()) {
