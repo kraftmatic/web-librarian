@@ -48,7 +48,7 @@ right, try another PDF viewer.
 
 [usermanual]: http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/user_manual.pdf "User Manual (English)"
 [usermanualIT]: http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/user_manual_IT.pdf "User Manual (Italian)"
-[usermanualmd5sums]: http://plugins.svn.wordpress.org/weblibrarian/assets/md5sum.txt
+[usermanualmd5sums]: http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/md5sum.txt
 
 == Frequently Asked Questions ==
 
