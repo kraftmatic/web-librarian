@@ -40,10 +40,13 @@ of the management of your library.
 Please   read  the  [PDF  User   Manual][usermanual]   ([also   available   in
 Italian][usermanualIT])  for complete documentation on using this plugin. This
 is a fairly  non-trivial  plugin, and there is not a simple  quick-start guide
-for the impatient.
+for the  impatient.  The user  manual  files are  1548805  bytes  long for the
+Italian  version  and  1548666  for the  Englist  version  and [MD5  sums  are
+available][usermanualmd5sums].
 
 [usermanual]: http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/user_manual.pdf "User Manual (English)"
 [usermanualIT]: http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/user_manual_IT.pdf "User Manual (Italian)"
+[usermanualmd5sums]: http://plugins.svn.wordpress.org/weblibrarian/assets/md5sum.txt
 
 == Frequently Asked Questions ==
 
