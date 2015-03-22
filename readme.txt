@@ -137,8 +137,11 @@ sure you properly downloaded the file.  The correct download urls are:
 
 User Manual (English):
 http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/user_manual.pdf
+
 User Manual (Italian):
 http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/user_manual_IT.pdf
+
+[usermanualmd5sums]: http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/md5sum.txt
 
 = Something does not work. What should I do? =
 
