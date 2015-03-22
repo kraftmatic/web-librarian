@@ -129,6 +129,16 @@ https://wordpress.org/support/topic/search-doesnt-work-7
   `[weblib_searchform actionurl='/?page_id=317' method='post']`    
   `[weblib_itemlist holdbutton=1 inlinemoreinfo=1]`
     
+= I cannot open the user manual, it appears to be corrupt =
+
+Please check the size of the PDF (1548805 for  user_manual_IT.pdf  and 1548666
+for user_manual.pdf) and also check the [MD5  sum][usermanualmd5sums]  to make
+sure you properly downloaded the file.  The correct download urls are:
+
+User Manual (English):
+http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/user_manual.pdf
+User Manual (Italian):
+http://plugins.svn.wordpress.org/weblibrarian/assets/user_manual/user_manual_IT.pdf
 
 = Something does not work. What should I do? =
 
