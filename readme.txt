@@ -3,7 +3,7 @@ Contributors: RobertPHeller
 Donate link: http://www.deepsoft.com/WebLibrarian
 Tags: widget,plugin,shortcode,library,circulation,database
 Requires at least: 3.2.1
-Tested up to: 4.1
+Tested up to: 4.2
 Stable tag: 3.2.10.8
 License: GPL2
 
