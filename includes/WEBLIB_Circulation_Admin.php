@@ -16,16 +16,18 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
   static $my_per_page = 'weblib_circulationdesk_per_page';
 
 
-  function __construct() {
+  function __construct($args = array()) {
     global $weblib_contextual_help;
 
     $screen_id =  add_menu_page(__('Circulation Desk','web-librarian'),__('Circulation Desk','web-librarian'),
 				'manage_circulation','weblib-circulation-desk',
 				array($this,'circulation_desk'),
 			WEBLIB_IMAGEURL.'/Circulation_Menu.png');
+    $args['screen'] = WP_Screen::get($screen_id);
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::__construct: args\['screen'\] = ".print_r($args['screen'],true)."\n");
     $weblib_contextual_help->add_contextual_help($screen_id,'weblib-circulation-desk');
     add_action("load-$screen_id", array($this,'add_per_page_option'));
-    parent::__construct();
+    parent::__construct($args);
   }
 
   function add_per_page_option() {
@@ -64,11 +66,11 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
     return $theitem->title().$this->row_actions($actions);
   }
   function column_status ($item) {
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::column_status($item)\n");
     $outitem = WEBLIB_OutItem::OutItemByBarcode($item);
     $numberofholds = WEBLIB_HoldItem::HoldCountsOfBarcode($item);
     $status = '';
     $brattr = ' style="display:none;"';
-    $this->patroninfo = '';
     if ($outitem != null) {
       $status = 'Due ';
       $duedate = $outitem->datedue();
@@ -78,12 +80,6 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
 	$status .= '<span id="due-date-'.$item.'" >'.strftime('%x',mysql2date('U',$duedate)).'</span>';
       }
       $status .= '<br /><input class="button" type="button" value="'.__('Renew','web-librarian').'" onClick="Renew('."'".$item."'".')" />';
-      $patronid = $outitem->patronid();
-      $telephone = WEBLIB_Patron::TelephoneFromId($patronid);
-      $userid = WEBLIB_Patron::UserIDFromPatronID($patronid);
-      $email = get_userdata( $userid )->user_email;
-      $this->patroninfo = '<a href="mailto:'.$email.'">'.WEBLIB_Patron::NameFromID($patronid).'</a>';
-      $this->patroninfo .= '<br />'.WEBLIB_Patrons_Admin::addtelephonedashes($telephone);
       unset($outitem);
     } else {
       $status .= __('Check Shelves', 'web-librarian');
@@ -97,18 +93,6 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
         $status .= sprintf(__('%d Hold','web-librarian'),$numberofholds);
       }
       $brattr = '';
-      if ($this->patroninfo == '') {
-	$holds = WEBLIB_HoldItem::HeldItemsByBarcode($item);
-	$firsthold = new WEBLIB_HoldItem($holds[0]);
-	$patronid = $firsthold->patronid();
-	$telephone = WEBLIB_Patron::TelephoneFromId($patronid);
-	$userid = WEBLIB_Patron::UserIDFromPatronID($patronid);
-	$email = get_userdata( $userid )->user_email;
-	$this->patroninfo = '<a href="mailto:'.$email.'">'.WEBLIB_Patron::NameFromID($patronid).'</a>';
-	$this->patroninfo .= '<br />'.WEBLIB_Patrons_Admin::addtelephonedashes($telephone);
-	$this->patroninfo .= '<br />Expires: '.strftime('%x',mysql2date('U',$firsthold->dateexpire()));
-	unset($firsthold);
-      }
     }
     $status .= '</span>';
     $status .= '<br id="hold-br-'.$item.'" '.$brattr.' /><input class="button" type="button" value="'.__('Place Hold','web-librarian').'" onClick="PlaceHold('."'".$item."');".'" />';
@@ -116,19 +100,88 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
   }
 
   function column_patron($item) {
-    return '<span id="patron-info-'.$item.'">'.$this->patroninfo.'</span>';
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::column_patron($item)\n");
+    $outitem = WEBLIB_OutItem::OutItemByBarcode($item);
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::column_patron(): outitem = ".print_r($outitem,true)."\n");
+    $numberofholds = WEBLIB_HoldItem::HoldCountsOfBarcode($item);
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::column_patron(): numberofholds = $numberofholds\n");
+    $patroninfo = '';
+    if ($outitem != null) {
+      $patronid = $outitem->patronid();
+      $telephone = WEBLIB_Patron::TelephoneFromId($patronid);
+      $userid = WEBLIB_Patron::UserIDFromPatronID($patronid);
+      $email = get_userdata( $userid )->user_email;
+      if ($email != '') {
+        $patroninfo = '<a href="mailto:'.$email.'">'.WEBLIB_Patron::NameFromID($patronid).'</a>';
+      } else {
+        $patroninfo = WEBLIB_Patron::NameFromID($patronid);
+      }
+      $patroninfo .= '<br />'.WEBLIB_Patrons_Admin::addtelephonedashes($telephone);
+      //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::column_patron(): (outitem != null) patroninfo = $patroninfo\n");
+    }
+    if ($numberofholds > 0 && $patroninfo == '') {
+      $holds = WEBLIB_HoldItem::HeldItemsByBarcode($item);
+      $firsthold = new WEBLIB_HoldItem($holds[0]);
+      $patronid = $firsthold->patronid();
+      $telephone = WEBLIB_Patron::TelephoneFromId($patronid);
+      $userid = WEBLIB_Patron::UserIDFromPatronID($patronid);
+      $email = get_userdata( $userid )->user_email;
+      if ($email != '') {
+        $patroninfo = '<a href="mailto:'.$email.'">'.WEBLIB_Patron::NameFromID($patronid).'</a>';
+      } else {
+        $patroninfo = WEBLIB_Patron::NameFromID($patronid);
+      }
+      $patroninfo .= '<br />'.WEBLIB_Patrons_Admin::addtelephonedashes($telephone);
+      $patroninfo .= '<br />Expires: '.strftime('%x',mysql2date('U',$firsthold->dateexpire()));
+      //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::column_patron(): (numberofholds > 0) patroninfo = $patroninfo\n");
+    }
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::column_patron(): (after both ifs) patroninfo = $patroninfo\n");    
+    $result =  '<span id="patron-info-'.$item.'">'.$patroninfo.'</span>';
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::column_patron(): result is $result\n");
+    return $result;
   }
-
+  
+  protected function single_row_columns( $item ) {
+    $columns = $this->get_columns();
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::single_row_columns(): columns = ".print_r($columns,true)."\n");
+    foreach ( $columns as $column_name => $column_display_name ) {
+      $class = "class='$column_name column-$column_name'";
+      
+      $style = '';
+      if ( in_array( $column_name, $hidden ) )
+      $style = ' style="display:none;"';
+      
+      $attributes = "$class$style";
+      
+      if ( 'cb' == $column_name ) {
+        echo '<th scope="row" class="check-column">';
+        echo $this->column_cb( $item );
+        echo '</th>';
+      }
+      elseif ( method_exists( $this, 'column_' . $column_name ) ) {
+        echo "<td $attributes>";
+        echo call_user_func( array( $this, 'column_' . $column_name ), $item );
+        echo "</td>";
+      }
+      else {
+        echo "<td $attributes>";
+        echo $this->column_default( $item, $column_name );
+        echo "</td>";
+      }
+    }
+  }
+  
+  
   function get_columns() {
     if ($this->mode == 'patroncircrecord') {
-      return array('barcode' => __('Barcode','web-librarian'),
+      $temp = array('barcode' => __('Barcode','web-librarian'),
 		   'title' => __('Title','web-librarian'),
 		   'author' => __('Author','web-librarian'),
 		   'type' => __('Type','web-librarian'),
 		   'callnumber'  => __('Call Number','web-librarian'),
 		   'status' => __('Status','web-librarian'));
     } else {
-      return array('barcode' => __('Barcode','web-librarian'),
+      $temp = array('barcode' => __('Barcode','web-librarian'),
 		   'title' => __('Title','web-librarian'),
 		   'author' => __('Author','web-librarian'),
 		   'type' => __('Type','web-librarian'),
@@ -136,6 +189,8 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
 		   'status' => __('Status','web-librarian'),
 		   'patron' => __('Patron','web-librarian'));
     }
+    //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::get_columns: ".print_r($temp,true)."\n");
+    return $temp;
   }
 
   function extra_tablenav ( $which ) {
@@ -249,6 +304,42 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
 </p>
 <?php
   }
+	protected function get_column_info() {
+		/*if ( isset( $this->_column_headers ) )
+			return $this->_column_headers;*/
+
+		$columns = get_column_headers( $this->screen );
+		$hidden = get_hidden_columns( $this->screen );
+
+		$sortable_columns = $this->get_sortable_columns();
+		/**
+		 * Filter the list table sortable columns for a specific screen.
+		 *
+		 * The dynamic portion of the hook name, `$this->screen->id`, refers
+		 * to the ID of the current screen, usually a string.
+		 *
+		 * @since 3.5.0
+		 *
+		 * @param array $sortable_columns An array of sortable columns.
+		 */
+		$_sortable = apply_filters( "manage_{$this->screen->id}_sortable_columns", $sortable_columns );
+
+		$sortable = array();
+		foreach ( $_sortable as $id => $data ) {
+			if ( empty( $data ) )
+				continue;
+
+			$data = (array) $data;
+			if ( !isset( $data[1] ) )
+				$data[1] = false;
+
+			$sortable[$id] = $data;
+		}
+
+		$this->_column_headers = array( $columns, $hidden, $sortable );
+                return array( $columns, $hidden, $sortable );
+		/*return $this->_column_headers;*/
+	}
 
   function prepare_items() {
     //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::prepare_items: _REQUEST = ".print_r($_REQUEST,true)."\n");
@@ -285,10 +376,12 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
     $this->patronid = isset($_REQUEST['patronid']) ? $_REQUEST['patronid'] : 0;
     if (isset($_REQUEST['barcodelookup']) && $this->mode != 'checkinpage') {
       $this->mode = 'itemcircrecord';
-      unset($this->_column_headers);
+      /*unset($this->_column_headers);
+      $this->get_column_info();*/
     } else if (isset($_REQUEST['patronlookup']) && $this->mode != 'checkinpage') {
       $this->mode = 'patroncircrecord';
-      unset($this->_column_headers);
+      /*unset($this->_column_headers);
+      $this->get_column_info();*/
     } else if ($this->mode == 'patroncircrecord' && 
 		isset($_REQUEST['checkoutitem'])) {
       $outitem = WEBLIB_OutItem::OutItemByBarcode($this->barcode);
@@ -487,8 +580,8 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
 	if ($message != '') {
 	  ?><div id="message" class="update fade"><?php echo $message; ?></div><?php
 	}
-	?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
-	<input type="hidden" name="page" value="weblib-circulation-desk" />
+	?><form method="post" action="<?php echo add_query_arg(array('page' => 'weblib-circulation-desk'),admin_url('admin.php')); ?>">
+	<?php /* <input type="hidden" name="page" value="weblib-circulation-desk" /> */ ?>
 	<?php if ($this->mode != 'checkinpage')
 		$this->search_box(__( 'Search Collection','web-librarian' ), 'collection' ); ?>
 	<?php $this->display(); ?></form></div><?php

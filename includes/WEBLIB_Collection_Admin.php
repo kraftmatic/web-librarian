@@ -15,10 +15,11 @@ if(!class_exists('WP_List_Table')){
 
 class WEBLIB_Collection_Shared extends WP_List_Table {
 
-  function __construct() {
+  function __construct($args = array()) {
 	parent::__construct(array(
 		'singular' => __('Item','web-librarian'),
-		'plural' => __('Items','web-librarian')
+		'plural' => __('Items','web-librarian'),
+                'screen' => isset( $args['screen'] ) ? $args['screen'] : null
 	) );
 
   }
@@ -78,10 +79,11 @@ class WEBLIB_Collection_Shared extends WP_List_Table {
 <?php
   }
 
-
+/*
   function get_column_info() {
     if ( isset( $this->_column_headers ) ) return $this->_column_headers;
-
+    $screen = get_current_screen();  
+    
     $columns = $this->get_columns( );
     $hidden = get_hidden_columns( $screen );
 
@@ -91,12 +93,14 @@ class WEBLIB_Collection_Shared extends WP_List_Table {
 
     return $this->_column_headers;
   }
-
-  function get_sortable_columns() {
-	return array('barcode' => array('barcode',false),
+*/
+function get_sortable_columns() {
+        $temp = array('barcode' => array('barcode',false),
 		     'title' => array('title',false), 
 		     'author' => array('author',false),
-		     'callnumber' => array('callnumber',false) );
+		     'callnumber' => array('callnumber',false) ); 
+        //file_put_contents("php://stderr","*** WEBLIB_Collection_Admin::get_sortable_columns: ".print_r($temp,true)."\n");
+	return $temp;
   }  
 
 }
@@ -110,13 +114,14 @@ class WEBLIB_Collection_Admin extends WEBLIB_Collection_Shared {
 
   static $my_per_page = 'weblib_collection_per_page';
 
-  function __construct() {
+  function __construct($args = array()) {
     global $weblib_contextual_help;
 
     $screen_id =  add_menu_page(__('Collection Database','web-librarian'), __('Collection','web-librarian'),
 				'manage_collection','weblib-collection-database',
 				array($this,'collection_database'),
-			WEBLIB_IMAGEURL.'/Collection_Menu.png');
+                                WEBLIB_IMAGEURL.'/Collection_Menu.png');
+    $args['screen'] = WP_Screen::get($screen_id);
     $weblib_contextual_help->add_contextual_help($screen_id,'weblib-collection-database');
     add_action("load-$screen_id", array($this,'add_per_page_option'));
     $screen_id =  add_submenu_page('weblib-collection-database',
@@ -135,7 +140,7 @@ class WEBLIB_Collection_Admin extends WEBLIB_Collection_Shared {
 				   'weblib-collection-maintance',
 				   array($this,'db_maintance'));
     $weblib_contextual_help->add_contextual_help($screen_id,'weblib-collection-maintance');
-   parent::__construct(); 
+   parent::__construct($args); 
 
   }
 
@@ -184,13 +189,16 @@ class WEBLIB_Collection_Admin extends WEBLIB_Collection_Shared {
     return $theitem->title().$this->row_actions($actions);
   }
 
-  function get_columns() {
-	return array('cb' => '<input type="checkbox" />',
+  public function get_columns() {
+    $temp = array('cb' => '<input type="checkbox" />',
 		     'barcode' => __('Barcode','web-librarian'),
 		     'title' => __('Title','web-librarian'),
 		     'author' => __('Author','web-librarian'),
 		     'type' => __('Type','web-librarian'),
 		     'callnumber' => __('Call Number','web-librarian') );
+    //file_put_contents("php://stderr","*** WEBLIB_Collection_Admin::get_columns: ".print_r($temp,true)."\n");
+    
+    return $temp;
   }
 
   function get_bulk_actions() {
