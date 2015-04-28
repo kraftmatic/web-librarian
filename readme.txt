@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/WebLibrarian
 Tags: widget,plugin,shortcode,library,circulation,database
 Requires at least: 3.2.1
 Tested up to: 4.2
-Stable tag: 3.2.10.9
+Stable tag: 3.2.10.10
 License: GPL2
 
 A WordPress plugin that implements a basic library collection and
@@ -162,6 +162,9 @@ as well.
 No Screenshots yet.
 
 == Changelog ==
+
+= 3.2.10.10 =
+* Fix minor error (unset variable).
 
 = 3.2.10.9 =
 * Fix errors in cirlist code (fun with changed WP_List api...).

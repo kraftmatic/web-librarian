@@ -143,6 +143,7 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
   
   protected function single_row_columns( $item ) {
     $columns = $this->get_columns();
+    $hidden  = get_hidden_columns( $this->screen );
     //file_put_contents("php://stderr","*** WEBLIB_Circulation_Admin::single_row_columns(): columns = ".print_r($columns,true)."\n");
     foreach ( $columns as $column_name => $column_display_name ) {
       $class = "class='$column_name column-$column_name'";
