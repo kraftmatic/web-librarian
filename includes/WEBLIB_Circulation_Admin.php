@@ -305,7 +305,7 @@ class WEBLIB_Circulation_Admin extends WEBLIB_Collection_Shared {
 </p>
 <?php
   }
-	protected function get_column_info() {
+	function get_column_info() {
 		/*if ( isset( $this->_column_headers ) )
 			return $this->_column_headers;*/
 
