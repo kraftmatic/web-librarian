@@ -769,10 +769,10 @@ class WEBLIB_ItemInCollection {
 	  } else {
 	    $this->record = array ('title' => "", 'author'    => "", 
 				   'subject'   => "", 'description' => "", 
-				   'category'  => "", 'media'	  => "", 
+				   'category'  => "", 'media' => "", 
 				   'publisher' => "", 'publocation' => "", 
 				   'pubdate'   => "0000-01-01", 
-				   'edition'   => "", 'isbn'	  => "", 
+				   'edition'   => "", 'isbn' => "", 
 				   'type'      => "unknown", 'thumburl' => "",
 				   'callnumber'   => "" );
 	  }
@@ -782,33 +782,69 @@ class WEBLIB_ItemInCollection {
 	  if ($this->dirty) $this->store();
 	}
 	function title() {return $this->record['title'];}
-	function set_title($t) {$this->record['title'] = $t;$this->dirty = true;}
+	function set_title($t) {
+          $this->record['title'] = substr($t,0,128);
+          $this->dirty = true;
+        }
 	function author() {return $this->record['author'];}
-	function set_author($t) {$this->record['author'] = $t;$this->dirty = true;}
+	function set_author($t) {
+          $this->record['author'] = substr($t,0,64);
+          $this->dirty = true;
+        }
 	function subject() {return $this->record['subject'];}
-	function set_subject($s) {$this->record['subject'] = $s;$this->dirty = true;}
+	function set_subject($s) {
+          $this->record['subject'] = substr($s,0,128);
+          $this->dirty = true;
+        }
 	function description() {return $this->record['description'];}
 	function set_description($s) {$this->record['description'] = $s;$this->dirty = true;}
 	function category() {return $this->record['category'];}
-	function set_category($s) {$this->record['category'] = $s;$this->dirty = true;}
+	function set_category($s) {
+          $this->record['category'] = substr($s,0,36);
+          $this->dirty = true;
+        }
 	function media() {return $this->record['media'];}
-	function set_media($s) {$this->record['media'] = $s;$this->dirty = true;}
+	function set_media($s) {
+          $this->record['media'] = substr($s,0,36);
+          $this->dirty = true;
+        }
 	function publisher() {return $this->record['publisher'];}
-	function set_publisher($s) {$this->record['publisher'] = $s;$this->dirty = true;}
+	function set_publisher($s) {
+          $this->record['publisher'] = substr($s,0,36);
+          $this->dirty = true;
+        }
 	function publocation() {return $this->record['publocation'];}
-	function set_publocation($s) {$this->record['publocation'] = $s;$this->dirty = true;}
+	function set_publocation($s) {
+          $this->record['publocation'] = substr($s,0,36);
+          $this->dirty = true;
+        }
 	function pubdate() {return $this->record['pubdate'];}
 	function set_pubdate($s) {$this->record['pubdate'] = $s;$this->dirty = true;}
 	function edition() {return $this->record['edition'];}
-	function set_edition($s) {$this->record['edition'] = $s;$this->dirty = true;}
+	function set_edition($s) {
+          $this->record['edition'] = substr($s,0,36);
+          $this->dirty = true;
+        }
 	function isbn() {return $this->record['isbn'];}
-	function set_isbn($s) {$this->record['isbn'] = $s;$this->dirty = true;}
+	function set_isbn($s) {
+          $this->record['isbn'] = substr($s,0,20);
+          $this->dirty = true;
+        }
 	function thumburl() {return $this->record['thumburl'];}
-	function set_thumburl($s) {$this->record['thumburl'] = $s;$this->dirty = true;}
+	function set_thumburl($s) {
+          $this->record['thumburl'] = substr($s,0,256);
+          $this->dirty = true;
+        }
 	function callnumber() {return $this->record['callnumber'];}
-	function set_callnumber($s) {$this->record['callnumber'] = $s;$this->dirty = true;}
+	function set_callnumber($s) {
+          $this->record['callnumber'] = substr($s,0,36);
+          $this->dirty = true;
+        }
 	function type() {return $this->record['type'];}
-	function set_type($t) {$this->record['type'] = $t;$this->dirty = true;}
+	function set_type($t) {
+          $this->record['type'] = substr($t,0,16);
+          $this->dirty = true;
+        }
 	function clean() {$this->dirty = false;}
 	function BarCode() {return $this->thebarcode;}
 	function isdirty() {return $this->dirty;}
